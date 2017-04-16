@@ -102,7 +102,7 @@ function allService()
                       },
                       {
                         "content_type":"text",
-                        "title":"Birthday Programing",
+                        "title":"Birthday Programming",
                         "payload":"BIRTHDAY_PROGRAMMING"
                       },
                     ]
@@ -174,14 +174,8 @@ function getUserInfos()
 
 function isNew($id)
 {
-    if(file_exists("fichier/user/".$id.".txt"))
-    {
-        return true ;
-    }
-    else
-    {
-        return false ;
-    }
+  #modif 1
+    file_exists("fichier/user/".$id.".txt")? true: false;
 }
 function selectRandomImage()
 {
@@ -204,54 +198,51 @@ function selectRandomMessage()
 function basicResponse($message,$name)
 {
     $reply  = " ";
-
-    if(preg_match('[hi|hello|good morning|morning]', strtolower($message)))
+#Modif 2
+    if(preg_match("#(hi|hello|good morning|morning)#i", $message))
     {
-        $reply = "Hello ".$name." i'm happy to meet you ! ";
+        $reply = "Hello ".$name." I'm happy to meet you ! ";
     }
-    else if(preg_match('[how are you|what was your day]', strtolower($message)))
+    else if(preg_match("#(How doing \?|what's up \?)#i", $message))
     {
         $reply = "I'm fine. Thanks !";
     }
-    else if(preg_match('[name|what is your name|names]', strtolower($message)))
+    else if(preg_match("#(name|what's your name|How do we call you \?)#i",$message))
     {
-        $reply = "My name is Pinohh ! It is my master who chose this name and i like it 😎.";
+        $reply = "My name is Pinohh ! The name was choosed by my devs and I'm proud of it !";
     }
-    else if(preg_match('[what do you do|what you do|now]', strtolower($message)))
+    else if(preg_match("#(what are you doing \?|what you do|)#i", $message))
     {
-        $reply = "Now i tchat with you ".$name." 😀 ";
+        $reply = "Now I'm tchating with you ".$name." 😀 ";
     }
-    else if(preg_match('[what is the time|time]', strtolower($message)))
-    {
-        $reply = "I'm not a clock 😜 please see in your device.";
-    }
-    else if(preg_match('[info|information|about you|about pinohh]', strtolower($message)))
+
+
+    else if(preg_match("#(info|information|about you|about pinohh|more)#i", $message))
     {
         $reply = "Cool 😎 . visit us here https://pinohh.herokuapp.com";
     }
-    else if(preg_match('[^cool|^ok|^yes]', strtolower($message)))
+    else if(preg_match("#^(cool|ok|yes)#i", $message))
     {
         $reply = "😉😉😉 👍🏾 ";
     }
-    else if(preg_match('[^bye|goodbye|see you soon|after]', strtolower($message)))
+    else if(preg_match("#^(bye|goodbye|see you soon|after)#i", $message))
     {
         $reply = getGiphy("goodbye");
     }
-    else if(preg_match('[^thank|^thanks|^thx|nice]', strtolower($message)))
+    else if(preg_match("#^(thank|thanks|thx|nice|cheer(s)?)#i", $message))
     {
         $reply = "😊😊";
     }
-    else if(preg_match('[^help|^need help]', strtolower($message)))
+    else if(preg_match("#^(help|need help])#i",$message))
     {
+      //bold the text, or make list ;..
         $reply = "Hi there. So I can tell you the birthday programing , the survey vote and more.Please go to the persistent menu.";
     }
-    else if(preg_match('[^old|^what ol are you|old are you]', strtolower($message)))
+
+
+    else if(preg_match("#(where are you |where do you come from | where are you going)#i", $message))
     {
-        $reply = "I don't know exactlly  but i born on 2017/03/15 at 8h18 PM";
-    }
-    else if(preg_match('[where are you |where do you come from | where are you going]', strtolower($message)))
-    {
-        $reply = "I come from Cameroon 🇨🇲. It is a country of central Africa. If you want to know more about me, please go here: https://pinohh.herokuapp.com";
+        $reply = "I'm from Cameroon 🇨🇲. \n I was made with :heart: by Cameroonians devs ! \nGet more information on the site : http://pinohh.herokuapp.com";
     }
 
     return $reply ;
@@ -285,16 +276,16 @@ function setUserInformation()
     global $message ;
     global $chemin ;
     global $query ;
-    if(filter_var(strtolower($message), FILTER_VALIDATE_EMAIL) || preg_match('[^null]', strtolower($message)))
+    if(filter_var(strtolower($message), FILTER_VALIDATE_EMAIL) || preg_match("#^(none)#i", $message))
     {
-        sendTextMessage("Thank you for your correct answer to my question.Your option is correctly set");
+        sendTextMessage("Thank you for your  answer to my question.Your option is correctly set");
         allService();
         $query->addUser($sender,strtolower($message));
         file_put_contents($chemin,"");
     }
     else
     {
-        sendTextMessage("Please provide a valid information 😕 .");
+        sendTextMessage("Please provide a valid email or type \"none\" if you don't get one 😕 .");
     }
 }
 
@@ -317,7 +308,7 @@ function getUserPosition()
     }
     else
     {
-        sendTextMessage("Your position is incorrecte 😔. Please enter a correct position");
+        sendTextMessage("Your position is incorrect  😔. Please enter a correct position");
         sharePosition();
 
     }
@@ -340,7 +331,7 @@ function surveyResponse()
                   "id":"'.$sender.'"
                 },
                 "message":{
-                  "text":"Made your choice to vote this survey.",
+                  "text":"Make your choice to vote this survey.",
                   "quick_replies":[
                     {
                       "content_type":"text",
@@ -349,8 +340,8 @@ function surveyResponse()
                     },
                     {
                       "content_type":"text",
-                      "title":"Againts",
-                      "payload":"AGAINTS"
+                      "title":"Against",
+                      "payload":"AGAINST"
                     },
                     {
                       "content_type":"text",
@@ -397,24 +388,25 @@ function testVote()
     global $name ;
     global $query ;
 
-    if(preg_match('[^for|^againts|^neutral]', strtolower($message)))
+    if(preg_match("#^(for|againts|neutral])#i", $message))
     {
         file_put_contents("etape/".$sender.".txt","");
         $data = $query->getLastSurvey();
         if($query->haveVote($sender,$data['id'])==false)
         {
           $query->addVote($sender,$data['id'],$message);
-          sendTextMessage("Thanks you for your vote 🤝 $name ");
+          sendTextMessage("Your vote has been successfully saved. Thank you 🤝 $name ");
         }
         else
         {
-          sendTextMessage("thanks but, 😶 you have already voted for this survey. Wait for the next poll to vote again.");
+          //You can view results here .... link for survey results
+          sendTextMessage("thanks but, 😶 you have already voted for this survey.  Wait for the next poll to vote again.");
         }
 
     }
     else
     {
-        sendTextMessage("Please vote normaly");
+        sendTextMessage("Please vote by using either \"For\" or \"Against\" or \" Neutral\" .");
         surveyResponse();
     }
 
@@ -433,12 +425,12 @@ function testUsername()
       file_put_contents($path,$message." #");
       file_put_contents("etape/".$sender.".txt","3-2");
       sendTextMessage("Coool😉");
-      sendTextMessage("Please give the email address of ".$message);
+      sendTextMessage("Please give me the email address of ".$message);
 
     }
     else
     {
-      sendTextMessage("Please enter a correct name of a person.");
+      sendTextMessage("Please enter a correct person name.");
     }
 }
 
@@ -517,7 +509,7 @@ function testBirthdayYear()
   global $sender ;
   global $message ;
 
-  if(preg_match("[^\d{4}/\d{1,2}/\d{1,2}$]", strtolower($message)) OR preg_match('[^now]', strtolower($message)) OR preg_match('[^tomorrow]', strtolower($message)))
+  if(preg_match("[^\d{4}/\d{1,2}/\d{1,2}$]", strtolower($message)) || preg_match('[^now]', strtolower($message)) || preg_match('[^tomorrow]', strtolower($message)))
   {
     if(preg_match('[^now]', strtolower($message)))
     {
@@ -559,9 +551,9 @@ function testResponseText()
     $tmp = $tmp." null";
     file_put_contents($path,$tmp." # ".$name);
     file_put_contents("etape/".$sender.".txt","");
-
+he email
   }
-  else if(preg_match('[^i enter my text]', strtolower($message)))
+  else if(preg_match('[^I enter my text]', strtolower($message)))
   {
     file_put_contents("etape/".$sender.".txt","3-5");
     sendTextMessage("OK please enter a text for your friend");
@@ -596,5 +588,5 @@ function receiveText()
 
 function sendBirthdayMail(array $data)
 {
-  
+
 }
