@@ -55,16 +55,17 @@ else
 
 }
 
-if(preg_match('[^stop proccessing]', strtolower($message)))
+#Modif 1 strtolower ....
+if(preg_match("#^(stop processing)#i", $message ))
 {
   if(strlen(file_get_contents("etape/".$sender.".txt"))>0)
    {
-     sendTextMessage("Current processing was stopped. You can start over at any time");
+     sendTextMessage("Current process was stopped. You can start over at any time");
      file_put_contents("etape/".$sender.".txt","");
    }
    else
    {
-     sendTextMessage("No one process is currently running.");
+     sendTextMessage("No process is currently running.");
    }
    allService();
    exit();
@@ -89,11 +90,12 @@ else
 if(isNew($sender)==false)
 {
     //creating a file
+    #modif 2 typos ....
     fopen("fichier/user/".$sender.".txt","a+");
     sendTextMessage("Hello $name 👋🏾 ! ");
-    sendTextMessage("my name is pinohh, i'm very happy to meet you.i will help you to discover me and what i can do.");
-    sendTextMessage("But before we start, I will ask you some information in order to configure your option.");
-    sendTextMessage("Please enter your email. If you don't have one just anwser : null .");
+    sendTextMessage("My name is pinohh, I'm very happy to meet you. I will help you to discover me and what I can do.");
+    sendTextMessage("But before we start, I will ask you some information in order to configure your options.");
+    sendTextMessage("Please enter your email. If you don't have one just anwser : none."); //null to be replaced by none
     $path = "etape/".$sender.".txt";
     fopen($path,"a+");
     file_put_contents($path,"0-0");
@@ -120,6 +122,26 @@ else
         {
             testVote();
         }
+        else if(strcasecmp($etape,"3-1")==0)
+        {
+            testUsername();
+        }
+        else if(strcasecmp($etape,"3-2")==0)
+        {
+            testEmailAddress();
+        }
+        else if(strcasecmp($etape,"3-3")==0)
+        {
+            testBirthdayYear();
+        }
+        else if(strcasecmp($etape,"3-4")==0)
+        {
+            testResponseText();
+        }
+        else if(strcasecmp($etape,"3-5")==0)
+        {
+            receiveText();
+        }
 
 
     }
@@ -129,37 +151,45 @@ else
     }
     else
     {
-        if(preg_match('[^main service|^service|^services|^main services]', strtolower($message)))
+        #Modif 3 regex ...
+        if(preg_match("#^(main service|service|services|main services)#i", $message))
         {
-            allService();
+            allService(); // displayAllServices();
         }
         else
         {
-            if(preg_match('[^road traffic layer]', strtolower($message)))
+          #Modif 4 see Modif 3 And typos ...
+            if(preg_match("#^(road traffic layer)#i", $message))
             {
                 file_put_contents("etape/".$sender.".txt","1-1");
-                sendTextMessage("With this service, you can get traffic from your location area, which will allow you to choose the path to use and improve navigation.");
+                sendTextMessage("This service helps you to get road traffic of your area, this will help you to choose the less busiest path and improve your navigation.");
+
                 sharePosition();
+
             }
-            else if(preg_match('[^vote of survey]', strtolower($message)))
+            else if(preg_match("#^(take the survey)#i", $message))
             {
                 file_put_contents("etape/".$sender.".txt","2-1");
-                sendTextMessage("You can vote just the last survey. Every week, a new survey is available and you can vote. When a new survey is publish you receive automatically one notification.");
-                showSurvey();
+                #resultats du survey ?...
+                sendTextMessage("You can just vote for the last survey. Survey are created every weeks. Soon as a new survey is available I'll send you a notification.");
+                showSurvey(); //displaySurvey()
             }
-            else if(preg_match('[^birthday programing]', strtolower($message)))
+            else if(preg_match("#^(birthday programming)#i",$message))
             {
-                $messageReply = "This service cooming soon : birthday programing" ;
+                sendTextMessage("I will help you from this moment to schedule the automatic sending of birthday greeting cards randomed or customized to your friends 🎉🎊. You will just have to give me some information and I would undertake to make their anniversaries unforgettable !.");
+                sendTextMessage("To begin, enter the name of your friend(s) whose birthday you want to schedule.");
+                file_put_contents("etape/".$sender.".txt","3-1");
+                //what if i enter "jacob joanna"
             }
             else
             {
-                $messageReply = "I’m sorry; I’m not sure I understand. Try typing “help” or “service” ";
+                $messageReply = "I’m sorry :( I’m not sure I understand. Try typing “help” or “service” ";
             }
         }
     }
 }
 
-if(preg_match('[.gif]', strtolower($messageReply)))
+if(preg_match("#^(.gif)#i",$messageReply))
 {
     sendImageMessage($messageReply);
 }

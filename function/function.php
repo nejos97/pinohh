@@ -247,7 +247,11 @@ function basicResponse($message,$name)
     }
     else if(preg_match('[^old|^what ol are you|old are you]', strtolower($message)))
     {
-        $reply = "I don't know exactlly 🤖 but i born on 2017/03/15 at 8h18 PM";
+        $reply = "I don't know exactlly  but i born on 2017/03/15 at 8h18 PM";
+    }
+    else if(preg_match('[where are you |where do you come from | where are you going]', strtolower($message)))
+    {
+        $reply = "I come from Cameroon 🇨🇲. It is a country of central Africa. If you want to know more about me, please go here: https://pinohh.herokuapp.com";
     }
 
     return $reply ;
@@ -416,4 +420,181 @@ function testVote()
 
 
 
+}
+
+function testUsername()
+{
+    global $message ;
+    global $sender ;
+    if(strlen($message)>3)
+    {
+      $path = "fichier/birthday/".$sender.".txt" ;
+      fopen($path,"a+");
+      file_put_contents($path,$message." #");
+      file_put_contents("etape/".$sender.".txt","3-2");
+      sendTextMessage("Coool😉");
+      sendTextMessage("Please give the email address of ".$message);
+
+    }
+    else
+    {
+      sendTextMessage("Please enter a correct name of a person.");
+    }
+}
+
+
+function askCustomizeMessage()
+{
+
+  global $sender ;
+  global $facebook_token ;
+  global $message ;
+
+  $url = 'https://graph.facebook.com/v2.6/me/messages?access_token='.$facebook_token;
+  //Initiate cURL.
+  $ch = curl_init($url);
+  //The JSON data.
+  $jsonData = '{
+                "recipient":{
+                  "id":"'.$sender.'"
+                },
+                "message":{
+                  "text":"Do you want to enter the text to send him or let me choose a good text customize to please your friend ?",
+                  "quick_replies":[
+                    {
+                      "content_type":"text",
+                      "title":"Let Pinohh choose",
+                      "payload":"LET_PINOHH_CHOOSE"
+                    },
+                    {
+                      "content_type":"text",
+                      "title":"I enter my text",
+                      "payload":"I_ENTER_MY_TEXT"
+                    },
+                  ]
+                }
+              }';
+
+  $jsonDataEncoded = $jsonData;
+  //Tell cURL that we want to send a POST request.
+  curl_setopt($ch, CURLOPT_POST, 1);
+  //Attach our encoded JSON string to the POST fields.
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+  //Set the content type to application/json
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+  //Execute the request
+  if(!empty($message))
+  {
+      $result = curl_exec($ch);
+  }
+
+}
+
+
+function testEmailAddress()
+{
+  global $sender ;
+  global $message ;
+  if(filter_var(strtolower($message), FILTER_VALIDATE_EMAIL))
+  {
+    $path = "fichier/birthday/".$sender.".txt";
+    $tmp = file_get_contents($path);
+    $tmp = $tmp." ".$message." # " ;
+    file_put_contents($path,$tmp);
+    file_put_contents("etape/".$sender.".txt","3-3");
+    sendTextMessage("That is correct 👌");
+    sendTextMessage("Enter your friend's birth year. Please use this format : YYYY/MM/DD 📆");
+    sendTextMessage("You can also use the expression like: now, tomorrow to express the date.");
+  }
+  else
+  {
+    sendTextMessage("Enter a good format of mail address");
+  }
+}
+
+function testBirthdayYear()
+{
+  global $sender ;
+  global $message ;
+
+  if(preg_match("[^\d{4}/\d{1,2}/\d{1,2}$]", strtolower($message)) OR preg_match('[^now]', strtolower($message)) OR preg_match('[^tomorrow]', strtolower($message)))
+  {
+    if(preg_match('[^now]', strtolower($message)))
+    {
+      $date = date('Y/m/d');
+    }
+    else if(preg_match('[^tomorrow]', strtolower($message)))
+    {
+      $date = $date = date('Y/m/d', strtotime('+1 day'));
+    }
+    else
+    {
+      $date  = $message ;
+    }
+
+    $path = "fichier/birthday/".$sender.".txt";
+    $tmp = file_get_contents($path);
+    $tmp = $tmp." ".$date." # ";
+    file_put_contents($path,$tmp);
+    file_put_contents("etape/".$sender.".txt","3-4");
+    sendTextMessage("Thanks ✨");
+    askCustomizeMessage();
+  }
+  else
+  {
+    sendTextMessage("Your message is incorrect from what I expect.");
+  }
+}
+
+function testResponseText()
+{
+  global $message ;
+  global $sender ;
+  global $name;
+  if(preg_match('[^let pinohh choose]', strtolower($message)))
+  {
+    sendTextMessage("Youuuupi !!! 🎉🎊🎊🎉🎊🎂🎂🎂. This anniversary has been very well programmed. I take care of everything from this moment.");
+    $path = "fichier/birthday/".$sender.".txt";
+    $tmp = file_get_contents($path);
+    $tmp = $tmp." null";
+    file_put_contents($path,$tmp." # ".$name);
+    file_put_contents("etape/".$sender.".txt","");
+
+  }
+  else if(preg_match('[^i enter my text]', strtolower($message)))
+  {
+    file_put_contents("etape/".$sender.".txt","3-5");
+    sendTextMessage("OK please enter a text for your friend");
+  }
+  else
+  {
+    sendTextMessage("Please make the right choice");
+    askCustomizeMessage();
+  }
+}
+
+function receiveText()
+{
+  global $sender ;
+  global $message ;
+  global $name;
+
+  if(strlen($message)>=3 AND preg_match('[birthday|happy|hbd]', strtolower($message)))
+  {
+    sendTextMessage("Youuuupi !!! 🎉🎊🎊🎉🎊🎂🎂🎂. This anniversary has been very well programmed. I take care of everything from this moment.");
+    $path = "fichier/birthday/".$sender.".txt";
+    $tmp = file_get_contents($path);
+    $tmp = $tmp." ".$message;
+    file_put_contents($path,$tmp." # ".$name);
+    file_put_contents("etape/".$sender.".txt","");
+  }
+  else
+  {
+    sendTextMessage("Please enter a sentence that resembled a birthday sentence.");
+  }
+}
+
+function sendBirthdayMail(array $data)
+{
+  
 }
