@@ -174,7 +174,6 @@ function getUserInfos()
 
 function isNew($id)
 {
-  #modif 1
     file_exists("fichier/user/".$id.".txt")? true: false;
 }
 function selectRandomImage()
@@ -185,7 +184,7 @@ function selectRandomImage()
     $imagePath = "pattern/background/".$imagesId.".png" ;
     return $imagePath;
 }
-function selectRandomMessage()
+function selectRandomMessage($name,$sender)
 {
     $tableau  = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20);
     $messageKey = array_rand($tableau);
@@ -198,25 +197,23 @@ function selectRandomMessage()
 function basicResponse($message,$name)
 {
     $reply  = " ";
-#Modif 2
+
     if(preg_match("#(hi|hello|good morning|morning)#i", $message))
     {
         $reply = "Hello ".$name." I'm happy to meet you ! ";
     }
-    else if(preg_match("#(How doing \?|what's up \?)#i", $message))
+    else if(preg_match("#(How doing |what's up| how are you)#i", $message))
     {
         $reply = "I'm fine. Thanks !";
     }
-    else if(preg_match("#(name|what's your name|How do we call you \?)#i",$message))
+    else if(preg_match("#(name|what's your name|How do we call you)#i",$message))
     {
         $reply = "My name is Pinohh ! The name was choosed by my devs and I'm proud of it !";
     }
-    else if(preg_match("#(what are you doing \?|what you do|)#i", $message))
+    else if(preg_match("#(what are you doing|what you do| what do you do)#i", $message))
     {
         $reply = "Now I'm tchating with you ".$name." 😀 ";
     }
-
-
     else if(preg_match("#(info|information|about you|about pinohh|more)#i", $message))
     {
         $reply = "Cool 😎 . visit us here https://pinohh.herokuapp.com";
@@ -235,14 +232,15 @@ function basicResponse($message,$name)
     }
     else if(preg_match("#^(help|need help])#i",$message))
     {
-      //bold the text, or make list ;..
         $reply = "Hi there. So I can tell you the birthday programing , the survey vote and more.Please go to the persistent menu.";
     }
-
-
     else if(preg_match("#(where are you |where do you come from | where are you going)#i", $message))
     {
-        $reply = "I'm from Cameroon 🇨🇲. \n I was made with :heart: by Cameroonians devs ! \nGet more information on the site : http://pinohh.herokuapp.com";
+        $reply = "I'm from Cameroon 🇨🇲. \n I was made with :heart: by Cameroonians devs ! \n Get more information on the site : http://pinohh.herokuapp.com";
+    }
+    else if(preg_match("#^(time please|what is the time|what is the date])#i",$message))
+    {
+        $reply = "I'm not a clock's or colendar please watch in your device";
     }
 
     return $reply ;
@@ -388,7 +386,7 @@ function testVote()
     global $name ;
     global $query ;
 
-    if(preg_match("#^(for|againts|neutral])#i", $message))
+    if(preg_match("#^(for|againts|neutral)#i", $message))
     {
         file_put_contents("etape/".$sender.".txt","");
         $data = $query->getLastSurvey();
@@ -406,7 +404,7 @@ function testVote()
     }
     else
     {
-        sendTextMessage("Please vote by using either \"For\" or \"Against\" or \" Neutral\" .");
+        sendTextMessage("Please vote by using either \"For\" , \"Against\" or \" Neutral\" .");
         surveyResponse();
     }
 
@@ -418,11 +416,11 @@ function testUsername()
 {
     global $message ;
     global $sender ;
-    if(strlen($message)>3)
+    if(strlen($message)>=2)
     {
       $path = "fichier/birthday/".$sender.".txt" ;
       fopen($path,"a+");
-      file_put_contents($path,$message." #");
+      file_put_contents($path,$message." ^ ");
       file_put_contents("etape/".$sender.".txt","3-2");
       sendTextMessage("Coool😉");
       sendTextMessage("Please give me the email address of ".$message);
@@ -491,12 +489,12 @@ function testEmailAddress()
   {
     $path = "fichier/birthday/".$sender.".txt";
     $tmp = file_get_contents($path);
-    $tmp = $tmp." ".$message." # " ;
+    $tmp = $tmp." ".$message." ^ " ;
     file_put_contents($path,$tmp);
     file_put_contents("etape/".$sender.".txt","3-3");
     sendTextMessage("That is correct 👌");
     sendTextMessage("Enter your friend's birth year. Please use this format : YYYY/MM/DD 📆");
-    sendTextMessage("You can also use the expression like: now, tomorrow to express the date.");
+    sendTextMessage("You can also use the expression like: today, tomorrow to express the date.");
   }
   else
   {
@@ -509,9 +507,9 @@ function testBirthdayYear()
   global $sender ;
   global $message ;
 
-  if(preg_match("[^\d{4}/\d{1,2}/\d{1,2}$]", strtolower($message)) || preg_match('[^now]', strtolower($message)) || preg_match('[^tomorrow]', strtolower($message)))
+  if(preg_match("[^\d{4}/\d{1,2}/\d{1,2}$]", strtolower($message)) || preg_match('[^today]', strtolower($message)) || preg_match('[^tomorrow]', strtolower($message)))
   {
-    if(preg_match('[^now]', strtolower($message)))
+    if(preg_match('[^today]', strtolower($message)))
     {
       $date = date('Y/m/d');
     }
@@ -526,7 +524,7 @@ function testBirthdayYear()
 
     $path = "fichier/birthday/".$sender.".txt";
     $tmp = file_get_contents($path);
-    $tmp = $tmp." ".$date." # ";
+    $tmp = $tmp." ".$date." ^ ";
     file_put_contents($path,$tmp);
     file_put_contents("etape/".$sender.".txt","3-4");
     sendTextMessage("Thanks ✨");
@@ -549,9 +547,8 @@ function testResponseText()
     $path = "fichier/birthday/".$sender.".txt";
     $tmp = file_get_contents($path);
     $tmp = $tmp." null";
-    file_put_contents($path,$tmp." # ".$name);
+    file_put_contents($path,$tmp." ^ ".$name);
     file_put_contents("etape/".$sender.".txt","");
-he email
   }
   else if(preg_match('[^I enter my text]', strtolower($message)))
   {
@@ -577,16 +574,11 @@ function receiveText()
     $path = "fichier/birthday/".$sender.".txt";
     $tmp = file_get_contents($path);
     $tmp = $tmp." ".$message;
-    file_put_contents($path,$tmp." # ".$name);
+    file_put_contents($path,$tmp." ^ ".$name);
     file_put_contents("etape/".$sender.".txt","");
   }
   else
   {
     sendTextMessage("Please enter a sentence that resembled a birthday sentence.");
   }
-}
-
-function sendBirthdayMail(array $data)
-{
-
 }

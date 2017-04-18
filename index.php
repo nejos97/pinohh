@@ -12,7 +12,6 @@
 //include class and function for our script
 include_once("function/function.php");
 include_once("class/Constant.Class.php");
-include_once("class/UserProfile.Class.php");
 include_once("class/Query.Class.php");
 
 //initialize Constant Object
@@ -83,9 +82,6 @@ else
 {
   $name = "Amigo 🍕 " ;
 }
-//test si un payload existe.
-
-
 //test if the user is new
 if(isNew($sender)==false)
 {
@@ -95,7 +91,7 @@ if(isNew($sender)==false)
     sendTextMessage("Hello $name 👋🏾 ! ");
     sendTextMessage("My name is pinohh, I'm very happy to meet you. I will help you to discover me and what I can do.");
     sendTextMessage("But before we start, I will ask you some information in order to configure your options.");
-    sendTextMessage("Please enter your email. If you don't have one just anwser : none."); //null to be replaced by none
+    sendTextMessage("Please enter your email. If you don't have one just anwser : none.");
     $path = "etape/".$sender.".txt";
     fopen($path,"a+");
     file_put_contents($path,"0-0");
@@ -142,8 +138,6 @@ else
         {
             receiveText();
         }
-
-
     }
     else if(strlen(basicResponse($message,$name))>1)
     {
@@ -151,10 +145,9 @@ else
     }
     else
     {
-        #Modif 3 regex ...
         if(preg_match("#^(main service|service|services|main services)#i", $message))
         {
-            allService(); // displayAllServices();
+            allService();
         }
         else
         {
@@ -167,12 +160,11 @@ else
                 sharePosition();
 
             }
-            else if(preg_match("#^(take the survey)#i", $message))
+            else if(preg_match("#^(vote of survey)#i", $message))
             {
                 file_put_contents("etape/".$sender.".txt","2-1");
-                #resultats du survey ?...
                 sendTextMessage("You can just vote for the last survey. Survey are created every weeks. Soon as a new survey is available I'll send you a notification.");
-                showSurvey(); //displaySurvey()
+                showSurvey();
             }
             else if(preg_match("#^(birthday programming)#i",$message))
             {
@@ -189,7 +181,7 @@ else
     }
 }
 
-if(preg_match("#^(.gif)#i",$messageReply))
+if(preg_match("#(.gif)#i",$messageReply))
 {
     sendImageMessage($messageReply);
 }
