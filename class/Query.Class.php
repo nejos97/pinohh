@@ -47,5 +47,22 @@ class Query
         }
 
     }
+    public function desinscrire($sender)
+    {
+        $req = $this->base->prepare("DELETE FROM user WHERE idFacebook = :idFacebook ");
+        $req->bindValue(":idFacebook",$sender,PDO::PARAM_INT);
+        $req->execute();
+    }
+    public function addNewBirthday($friendName,$year,$mail,$image,$message,$senderName)
+    {
+        $req = $this->base->prepare("INSERT INTO birthday VALUES(NULL,:friendName,:year,:mail,:image,:message,:senderName,1,NOW())");
+        $req->bindValue(":friendName",$friendName, PDO::PARAM_STR);
+        $req->bindValue(":year",$year, PDO::PARAM_STR);
+        $req->bindValue(":mail",$mail, PDO::PARAM_STR);
+        $req->bindValue(":image",$image, PDO::PARAM_STR);
+        $req->bindValue(":message",$message, PDO::PARAM_STR);
+        $req->bindValue(":senderName",$senderName, PDO::PARAM_STR);
+        $req->execute();
+    }
 
 }
