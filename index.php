@@ -79,7 +79,7 @@ if(!empty($data))
 }
 else
 {
-  $name = "Amigo 🍕 " ;
+  $name = "Amigo ð " ;
 }
 //test if the user is new
 if(isNew($sender))
@@ -87,7 +87,7 @@ if(isNew($sender))
     //creating a file
     #modif 2 typos ....
     fopen("fichier/user/".$sender.".txt","a+");
-    sendTextMessage("Hello $name 👋🏾 ! ");
+    sendTextMessage("Hello $name ðð¾ ! ");
     sendTextMessage("My name is pinohh, I'm very happy to meet you. I will help you to discover me and what I can do.");
     sendTextMessage("But before we start, I will ask you some information in order to configure your options.");
     sendTextMessage("Please enter your email. If you don't have one just anwser : none.");
@@ -166,7 +166,7 @@ else
             }
             else if(preg_match("#^(birthday programming)#i",$message) OR $message=="BIRTHDAY_PROGRAMMING")
             {
-                sendTextMessage("I will help you from this moment to schedule the automatic sending of birthday greeting cards randomed or customized to your friends 🎉🎊. You will just have to give me some information and I would undertake to make their anniversaries unforgettable !.");
+                sendTextMessage("I will help you from this moment to schedule the automatic sending of birthday greeting cards randomed or customized to your friends ðð. You will just have to give me some information and I would undertake to make their anniversaries unforgettable !.");
                 sendTextMessage("To begin, enter the name of your friend(s) whose birthday you want to schedule.");
                 file_put_contents("etape/".$sender.".txt","3-1");
             }
@@ -189,7 +189,7 @@ else
             }
             else
             {
-                $messageReply = "I’m sorry  I’m not sure I understand. Try typing help or service " ;
+                $messageReply = "Iâm sorry  Iâm not sure I understand. Try typing help or service " ;
             }
         }
     }
@@ -204,4 +204,3 @@ else
     sendTextMessage($messageReply);
 }
 messageTraiter();
-//file_put_contents("green.txt",persistentMenu());
