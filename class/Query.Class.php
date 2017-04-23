@@ -64,5 +64,25 @@ class Query
         $req->bindValue(":senderName",$senderName, PDO::PARAM_STR);
         $req->execute();
     }
+    public function getNumberUser()
+    {
+      $req = $this->base->query("SELECT COUNT(*) FROM user");
+      return $req->fetch();
+    }
 
+    public function getNumberBirthday()
+    {
+      $req = $this->base->query("SELECT COUNT(*) FROM birthday");
+      return $req->fetch();
+    }
+    public function getNumberVoteSurvey()
+    {
+      $req = $this->base->query("SELECT COUNT(*) FROM vote");
+      return $req->fetch();
+    }
+    public function getAllBirthday()
+    {
+      $req = $this->base->query("SELECT * FROM birthday");
+      return $req->fetchAll();
+    }
 }
