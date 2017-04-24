@@ -109,7 +109,7 @@ function persistentMenu()
                           {
                             "type":"web_url",
                             "title":"💻 About Developers",
-                            "url":"http://pinohh.herokuapp.com/team",
+                            "url":"http://pinohh.herokuapp.com/team.php",
                             "webview_height_ratio":"full"
                           },
                           {
@@ -425,7 +425,7 @@ function getRandomMessage($name,$sender)
     $messagePath = "pattern/message/".$messageId.".txt" ;
     $message = file_get_contents($messagePath);
     $message = preg_replace("#@receiver@#", "$name", $message) ;
-    $message = preg_replace("#@sender@#", "$sender", $message) ;
+    $message = preg_replace("#@sender@#", "<br/>$sender", $message) ;
     return $message;
 }
 
@@ -531,7 +531,7 @@ function getUserPosition()
     {
         $lat = $input['entry'][0]['messaging'][0]['message']['attachments'][0]['payload']['coordinates']['lat'];
         $long = $input['entry'][0]['messaging'][0]['message']['attachments'][0]['payload']['coordinates']['long'];
-        $url = "http://pinohh.000webhostapp.com/traffic.php?lat=$lat&long=$long";
+        $url = "http://pinohhbot.000webhostapp.com/traffic.php?lat=$lat&long=$long";
         $apiKey = "ab98a89f9bd91e26d14d2a5095fba4d8b10aaf2a7b8b";
         $width = 1024 ;
         $fetchUrl = "https://api.thumbnail.ws/api/".$apiKey."/thumbnail/get?url=".urlencode($url)."&width=".$width ;
@@ -732,7 +732,7 @@ function testBirthdayYear()
   global $sender ;
   global $message ;
 
-  if(preg_match("#^(\d{4}/\d{1,2}/\d{1,2})$#i", $message) || preg_match("#^(today)#i", $message) || preg_match("#^(tomorrow)#i", $message))
+  if(preg_match("#^(\d{4}/\d{2}/\d{2})$#i", $message) || preg_match("#^(today)#i", $message) || preg_match("#^(tomorrow)#i", $message))
   {
     if(preg_match("#^(today)#i", $message))
     {
@@ -849,7 +849,7 @@ function sendBirthdayMessage($text)
   $mail = trim($data[1]);
   $year = trim($data[2]);
   $message = trim($data[3]);
-  $senderName = trim("<br>".$data[4]);
+  $senderName = trim($data[4]);
 
   if(strtolower($message)=="null")
   {
@@ -860,6 +860,13 @@ function sendBirthdayMessage($text)
   $getImage = getRandomImage();
   $newPath = "fichier/image/".$imgName.".png";
   copy($getImage,$newPath);
-  $query->addNewBirthday($friendName,$year,$mail,$newPath,$message,$senderName);
+  file_put_contents("green.txt",$sender);
+  $query->addNewBirthday($sender,$friendName,$year,$mail,$newPath,$message,$senderName);
+
+}
+
+function getMailpattern($friendName,$message,$image)
+{
+    return $mail = "<html><head><title>Happy Birthday $friendName !!!</title><link href=\"https://fonts.googleapis.com/css?family=Lobster\" rel=\"stylesheet\"><style></style></head><body><center><h1>Happy Birthday $friendName</h1><div style=\"background:url('http://pinohhbot.000webhostapp.com/$image'); width:943px;height:790px;\"><p style=\"font-size:4.3em;padding:50px;font-weight:bold;color:#3498db;font-family:Lobster\"> $message </p></div><span><em>By <a href=\"https://pinohh.herokuapp.com\">Pinohh</a></em></span></center></body></html>";
 
 }

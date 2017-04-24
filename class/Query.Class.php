@@ -53,10 +53,11 @@ class Query
         $req->bindValue(":idFacebook",$sender,PDO::PARAM_INT);
         $req->execute();
     }
-    public function addNewBirthday($friendName,$year,$mail,$image,$message,$senderName)
+    public function addNewBirthday($sender,$friendName,$year,$mail,$image,$message,$senderName)
     {
-        $req = $this->base->prepare("INSERT INTO birthday VALUES(NULL,:friendName,:year,:mail,:image,:message,:senderName,1,NOW())");
-        $req->bindValue(":friendName",$friendName, PDO::PARAM_STR);
+        $req = $this->base->prepare("INSERT INTO birthday VALUES(NULL,:idFacebook,:friendName,:year,:mail,:image,:message,:senderName,1,NOW())");
+        $req->bindValue(":idFacebook", $sender, PDO::PARAM_INT);
+        $req->bindValue(":friendName", $friendName, PDO::PARAM_STR);
         $req->bindValue(":year",$year, PDO::PARAM_STR);
         $req->bindValue(":mail",$mail, PDO::PARAM_STR);
         $req->bindValue(":image",$image, PDO::PARAM_STR);
@@ -82,7 +83,13 @@ class Query
     }
     public function getAllBirthday()
     {
-      $req = $this->base->query("SELECT * FROM birthday");
-      return $req->fetchAll();
+      $req = $this->base->query("SELECT * FROM birthday WHERE alreadySend != 0 ");
+      return $req->fetchAll() ;
+    }
+    public function executeBirthday($id)
+    {
+      $req = $this->base->prepare("UPDATE birthday SET alreadySend = 0 WHERE id=:id ");
+      $req->bindValue(":id",$id,PDO::PARAM_INT);
+      $req->execute();
     }
 }
