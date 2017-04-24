@@ -189,7 +189,7 @@ else
             }
             else
             {
-                $messageReply = "I'm sorry  I'm not sure I understand. Try typing help or service " ;
+                $messageReply = "I'm sorry  I'm not sure I understand😕😕. Try typing help or service " ;
             }
         }
     }
