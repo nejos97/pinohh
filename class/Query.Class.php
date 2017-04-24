@@ -67,18 +67,18 @@ class Query
     public function getNumberUser()
     {
       $req = $this->base->query("SELECT COUNT(*) FROM user");
-      return $req->fetch();
+      return $req->fetchColumn();
     }
 
     public function getNumberBirthday()
     {
       $req = $this->base->query("SELECT COUNT(*) FROM birthday");
-      return $req->fetch();
+      return $req->fetchColumn();
     }
     public function getNumberVoteSurvey()
     {
       $req = $this->base->query("SELECT COUNT(*) FROM vote");
-      return $req->fetch();
+      return $req->fetchColumn();
     }
     public function getAllBirthday()
     {
