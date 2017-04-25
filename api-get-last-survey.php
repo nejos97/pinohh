@@ -8,7 +8,7 @@ $base = $constant->getDatabase();
 $query = new Query($base);
 
 $data = $query->getLastSurvey();
-$tableau = array("id"=>$data['id'],""=>$data[''],"nbrBirthday"=>$nbrBirthday,"nbrVoteSurvey"=>$nbrVoteSurvey);
-print_r(json_decode($tableau));
+$tableau = array("id"=>$data['id'],"text"=>$data['text'],"image"=>$data['image'],"date_publication"=>$data['date_publication']);
+print_r(json_encode($tableau));
 
 ?>

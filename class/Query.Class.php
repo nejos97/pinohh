@@ -92,4 +92,21 @@ class Query
       $req->bindValue(":id",$id,PDO::PARAM_INT);
       $req->execute();
     }
+
+    public function addNewSurvey($nom,$prenom,$email,$survey,$image)
+    {
+        $req = $this->base->prepare("INSERT INTO sondage VALUES(NULL,:nom, :prenom, :email, :texte, :image, NOW())");
+        $req->bindValue(":nom",$nom,PDO::PARAM_STR);
+        $req->bindValue(":prenom",$prenom,PDO::PARAM_STR);
+        $req->bindValue(":email",$email,PDO::PARAM_STR);
+        $req->bindValue(":texte",$survey,PDO::PARAM_STR);
+        $req->bindValue(":image",$image,PDO::PARAM_STR);
+        $req->execute();
+    }
+
+    public function getAllUsers()
+    {
+      $req = $this->base->query("SELECT * FROM user");
+      return $req->fetchAll() ;
+    }
 }
