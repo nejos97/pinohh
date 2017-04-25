@@ -13,6 +13,6 @@ $nbrUser = $query->getNumberUser();
 $nbrBirthday = $query->getNumberBirthday();
 $nbrVoteSurvey = $query->getNumberVoteSurvey();
 $tableau = array("nbrMessage"=>$nbrMessage,"nbrUser"=>$nbrUser,"nbrBirthday"=>$nbrBirthday,"nbrVoteSurvey"=>$nbrVoteSurvey);
-print_r($tableau);
+print_r(json_encode($tableau));
 
 ?>
