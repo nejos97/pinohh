@@ -109,4 +109,19 @@ class Query
       $req = $this->base->query("SELECT * FROM user");
       return $req->fetchAll() ;
     }
+
+    public function getSurveyResult()
+    {
+      $req = $this->base->query("SELECT COUNT(*) FROM vote WHERE vote=\"FOR\" ");
+      $for =  $req->fetchColumn();
+
+      $req = $this->base->query("SELECT COUNT(*) FROM vote WHERE vote=\"Against\" ");
+      $against =  $req->fetchColumn();
+
+      $req = $this->base->query("SELECT COUNT(*) FROM vote WHERE vote=\"Neutral\" ");
+      $neutral =  $req->fetchColumn();
+
+      return array("for"=>$for,"against"=>$against,"neutral"=>$neutral);
+
+    }
 }

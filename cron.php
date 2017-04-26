@@ -45,6 +45,7 @@ foreach($donnees as $donnee)
       //Definition du sujet
       $sujet = "Happy Birthday $friendName";
 
+      $msg = $passage_ligne."--".$boundary.$passage_ligne;
       $msg.= "Content-Type: text/html; charset=\"ISO-8859-1\"".$passage_ligne;
       //=====Création du header de l'e-mail.
       $header = "From: \"$senderName\"<noreply@pinohh.com>".$passage_ligne;

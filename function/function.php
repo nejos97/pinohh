@@ -867,6 +867,54 @@ function sendBirthdayMessage($text)
 
 function getMailpattern($friendName,$message,$image)
 {
-    return $mail = "<html><head><title>Happy Birthday $friendName !!!</title><link href=\"https://fonts.googleapis.com/css?family=Lobster\" rel=\"stylesheet\"><style></style></head><body><center><h1>Happy Birthday $friendName</h1><div style=\"background:url('http://pinohhbot.000webhostapp.com/$image'); width:943px;height:790px;\"><p style=\"font-size:4.3em;padding:50px;font-weight:bold;color:#3498db;font-family:Lobster\"> $message </p></div><span><em>By <a href=\"https://pinohh.herokuapp.com\">Pinohh</a></em></span></center></body></html>";
+    return $mail = "<html><head><title>Happy Birthday $friendName !!!</title><link href=\"https://fonts.googleapis.com/css?family=Lobster\" rel=\"stylesheet\"><style></style></head><body><center><h1>Happy Birthday $friendName</h1><div style=\"background:url('http://pinohhbot.000webhostapp.com/$image'); width:943px;height:790px;\"><p style=\"font-size:4.1em;padding:50px;font-weight:bold;color:#3498db;font-family:Lobster\"> $message </p></div><span><em>By <a href=\"https://pinohh.herokuapp.com\">Pinohh</a></em></span></center></body></html>";
+
+}
+
+function viewResult()
+{
+
+  global $sender ;
+  global $facebook_token ;
+  global $message ;
+
+  $url = 'https://graph.facebook.com/v2.6/me/messages?access_token='.$facebook_token;
+  //Initiate cURL.
+  $ch = curl_init($url);
+  //The JSON data.
+  $jsonData = '{
+                "recipient":{
+                  "id":"'.$sender.'"
+                },
+                "message":{
+                  "text":"View the survey result",
+                  "quick_replies":[
+                    {
+                      "content_type":"text",
+                      "title":"Let Pinohh choose",
+                      "payload":"LET_PINOHH_CHOOSE"
+                    },
+                    {
+                      "content_type":"text",
+                      "title":"I enter my text",
+                      "payload":"I_ENTER_MY_TEXT"
+                    },
+                  ]
+                }
+              }';
+
+  $jsonDataEncoded = $jsonData;
+  //Tell cURL that we want to send a POST request.
+  curl_setopt($ch, CURLOPT_POST, 1);
+  //Attach our encoded JSON string to the POST fields.
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+  //Set the content type to application/json
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+  //Execute the request
+  if(!empty($message))
+  {
+      $result = curl_exec($ch);
+  }
+
 
 }
