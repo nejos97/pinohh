@@ -18,7 +18,7 @@ class Query
     }
     public function getLastSurvey()
     {
-        $req = $this->base->query("SELECT * FROM sondage WHERE id = 1 ");
+        $req = $this->base->query("SELECT * FROM sondage WHERE id = (SELECT MAX(id) FROM sondage)");
         $data = $req->fetch();
         return $data ;
     }
@@ -112,13 +112,14 @@ class Query
 
     public function getSurveyResult()
     {
-      $req = $this->base->query("SELECT COUNT(*) FROM vote WHERE vote=\"FOR\" ");
+
+      $req = $this->base->query("SELECT COUNT(*) FROM vote WHERE vote=\"For\" AND idSurvey = (SELECT MAX(idSurvey) FROM vote)");
       $for =  $req->fetchColumn();
 
-      $req = $this->base->query("SELECT COUNT(*) FROM vote WHERE vote=\"Against\" ");
+      $req = $this->base->query("SELECT COUNT(*) FROM vote WHERE vote=\"Against\" AND idSurvey = (SELECT MAX(idSurvey) FROM vote) ");
       $against =  $req->fetchColumn();
 
-      $req = $this->base->query("SELECT COUNT(*) FROM vote WHERE vote=\"Neutral\" ");
+      $req = $this->base->query("SELECT COUNT(*) FROM vote WHERE vote=\"Neutral\" AND idSurvey = (SELECT MAX(idSurvey) FROM vote) ");
       $neutral =  $req->fetchColumn();
 
       return array("for"=>$for,"against"=>$against,"neutral"=>$neutral);

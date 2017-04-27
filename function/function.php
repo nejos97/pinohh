@@ -871,6 +871,7 @@ function getMailpattern($friendName,$message,$image)
 
 }
 
+
 function viewResult()
 {
 
