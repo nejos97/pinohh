@@ -54,7 +54,7 @@ else
 }
 
 #Modif 1 strtolower ....
-if(preg_match("#^(stop processing)#i", $message ) OR $message=="STOP_PROCESSING")
+if(preg_match("#^(stop processing|cancel|forget it|stop)#i", $message ) OR $message=="STOP_PROCESSING")
 {
   if(strlen(file_get_contents("etape/".$sender.".txt"))>0)
    {

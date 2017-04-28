@@ -125,4 +125,15 @@ class Query
       return array("for"=>$for,"against"=>$against,"neutral"=>$neutral);
 
     }
+
+    public function addNewContact($nom,$prenom,$email,$raison,$description)
+    {
+        $req = $this->base->prepare("INSERT INTO contact VALUES(NULL,:nom, :prenom, :email, :raison, :description, 1, NOW())");
+        $req->bindValue(":nom",$nom,PDO::PARAM_STR);
+        $req->bindValue(":prenom",$prenom,PDO::PARAM_STR);
+        $req->bindValue(":email",$email,PDO::PARAM_STR);
+        $req->bindValue(":raison",$raison,PDO::PARAM_STR);
+        $req->bindValue(":description",$description,PDO::PARAM_STR);
+        $req->execute();
+    }
 }

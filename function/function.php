@@ -627,10 +627,12 @@ function testVote()
         {
           $query->addVote($sender,$data['id'],$message);
           sendTextMessage("Your vote has been successfully saved. Thank you 🤝 $name ");
+          sendTextMessage("To see the result of your vote go to the official site of pinohh. You can find the site in the persistent menu.");
         }
         else
         {
           sendTextMessage("thanks but, 😶 you have already voted for this survey.  Wait for the next poll to vote again.");
+          sendTextMessage("To see the result of your vote go to the official site of pinohh. You can find the site in the persistent menu.");
         }
     }
     else
@@ -646,12 +648,23 @@ function testUsername()
     global $sender ;
     if(strlen($message)>=2)
     {
-      $path = "fichier/birthday/".$sender.".txt" ;
-      fopen($path,"a+");
-      file_put_contents($path,$message." ^ ");
-      file_put_contents("etape/".$sender.".txt","3-2");
-      sendTextMessage("Coool😉");
-      sendTextMessage("Please give me the email address of ".$message);
+      if(!preg_match("#(_|unsubscribe)#i", strtolower($message)))
+      {
+
+        $path = "fichier/birthday/".$sender.".txt" ;
+        fopen($path,"a+");
+        file_put_contents($path,$message." ^ ");
+        file_put_contents("etape/".$sender.".txt","3-2");
+        sendTextMessage("Coool😉");
+        sendTextMessage("Please give me the email address of ".$message);
+
+      }
+      else
+      {
+        sendTextMessage("Your respose is incorrect 🤔");
+        sendTextMessage("Please enter a correct name of your friend ⌛⏳");
+      }
+
 
     }
     else
@@ -718,7 +731,7 @@ function testEmailAddress()
     file_put_contents($path,$tmp);
     file_put_contents("etape/".$sender.".txt","3-3");
     sendTextMessage("That is correct 👌");
-    sendTextMessage("Enter your friend's birth year. Please use this format : YYYY/MM/DD 📆");
+    sendTextMessage("Enter your friend's future birthday.. Please use this format : YYYY/MM/DD 📆");
     sendTextMessage("You can also use the expression like: today, tomorrow to express the date.");
   }
   else
