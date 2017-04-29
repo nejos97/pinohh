@@ -782,6 +782,7 @@ function testResponseText()
   if(preg_match("#^(let pinohh choose)#i", $message))
   {
     sendTextMessage("Youuuupi !!! 🎉🎊🎊🎉🎊🎂🎂🎂. This anniversary has been very well programmed. I take care of everything from this moment.");
+    sendTextMessage("As soon as the birthday message is ready, I will send it to your friend 📧📨📩 and I would then notify you 😜😜");
     $path = "fichier/birthday/".$sender.".txt";
     $tmp = file_get_contents($path);
     $tmp = $tmp." null ^ ".$name;
@@ -810,6 +811,7 @@ function receiveText()
   if(strlen($message)>=3 AND preg_match("#(birthday|happy|hbd)#i", $message))
   {
     sendTextMessage("Youuuupi !!! 🎉🎊🎊🎉🎊🎂🎂🎂. This anniversary has been very well programmed. I take care of everything from this moment.");
+    sendTextMessage("As soon as the birthday message is ready, I will send it to your friend 📧📨📩 and I would then notify you 😜😜");
     $path = "fichier/birthday/".$sender.".txt";
     $tmp = file_get_contents($path);
     $tmp = $tmp." ".$message. " ^ ".$name ;
