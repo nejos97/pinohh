@@ -6,7 +6,7 @@ include_once("class/Constant.Class.php");
 $constant = new Constant();
 $base = $constant->getDatabase();
 $query = new Query($base);
-//global Var
+//global Var haha
 $message  = "Undefined";
 $facebook_token = $constant->getFacebookToken();;
 

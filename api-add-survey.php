@@ -38,7 +38,7 @@ if(isset($_POST['survey']))
        {
          $name = "Amigo ð " ;
        }
-       sendTextMessage("$name Just inform you that a new poll has just been published, you can vote at any time.");
+       sendTextMessage("$name Just inform you that a new poll has just been published, you can vote at any time. ");
      }
 
      header("location:https://pinohh.herokuapp.com/survey.php?task=ok");
@@ -49,6 +49,7 @@ if(isset($_POST['survey']))
     header("location:https://pinohh.herokuapp.com/survey.php?task=error");
   }
 }
+
 else
 {
   header("location:https://pinohh.herokuapp.com/survey.php?task=error");
