@@ -80,6 +80,7 @@ if(!empty($data))
 }
 else
 {
+  //if not receive a valid information we use a defeult name
   $name = "Amigo ð " ;
 }
 //test if the user is new
