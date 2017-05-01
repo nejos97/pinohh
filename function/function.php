@@ -511,7 +511,7 @@ function setUserInformation()
     global $query ;
     if(filter_var(strtolower($message), FILTER_VALIDATE_EMAIL) || preg_match("#^(none)#i", $message))
     {
-        sendTextMessage("Thank you for your  answer to my question.Your option is correctly set");
+        sendTextMessage("Thank you for your  answer to my question.Your setting is correctly set");
         displayAllService();
         $query->addUser($sender,strtolower($message));
         file_put_contents($chemin,"");

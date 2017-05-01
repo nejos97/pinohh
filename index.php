@@ -91,7 +91,7 @@ if(isNew($sender))
     fopen("fichier/user/".$sender.".txt","a+");
     sendTextMessage("Hello $name 👋👋👋 ! ");
     sendTextMessage("My name is pinohh, I'm very happy to meet you. I will help you to discover me and what I can do.");
-    sendTextMessage("But before we start, I will ask you some information in order to configure your options.");
+    sendTextMessage("But before we start, I will ask you some information in order to configure your settings.");
     sendTextMessage("Please enter your email. If you don't have one just anwser : none.");
     $path = "etape/".$sender.".txt";
     fopen($path,"a+");
