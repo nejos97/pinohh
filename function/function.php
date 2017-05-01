@@ -453,11 +453,11 @@ function basicResponse($message,$name)
     {
         $reply = "Cool 😎 . visit us here https://pinohh.herokuapp.com";
     }
-    else if(preg_match("#^(cool|ok|yes|haha|i'm fine)#i", $message))
+    else if(preg_match("#(cool|ok|yes|haha|good|i'm fine)#i", $message))
     {
         $reply = "😉😉😉 👍🏾 ";
     }
-    else if(preg_match("#^(bye|goodbye|see you soon|after|see you after)#i", $message))
+    else if(preg_match("#(bye|goodbye|see you soon|after|see you after)#i", $message))
     {
         $reply = getGiphy("goodbye");
     }
