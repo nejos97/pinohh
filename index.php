@@ -148,6 +148,7 @@ else
     {
         if(preg_match("#^(main service|service|services|main services)#i", $message))
         {
+            //Display all service when user send "main service,services,service,main services"
             displayAllService();
         }
         else
@@ -189,7 +190,7 @@ else
             }
             else
             {
-                $messageReply = "I'm sorry  i'm not sure I understand😕😕. Try typing help or service " ;
+                $messageReply = " I'm sorry  i'm not sure I understand😕😕. Try typing help or service " ;
             }
         }
     }
