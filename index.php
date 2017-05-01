@@ -142,6 +142,7 @@ else
     }
     else if(strlen(basicResponse($message,$name))>1)
     {
+
         $messageReply = basicResponse($message,$name);
     }
     else
