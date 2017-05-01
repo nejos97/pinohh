@@ -75,6 +75,7 @@ $messageReply = " ";
 $data = getUserInfos();
 if(!empty($data))
 {
+  //test if we receive a valid result
   $name = $data['last_name'] ;
 }
 else
